@@ -1,4 +1,3 @@
-key='12345'
+key='your_pswd'
 sql_name='book'
-user_name='user'
-
+user_name='root'

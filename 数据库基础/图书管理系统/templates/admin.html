@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+  <title>管理员界面</title>
+</head>
+<body>
+<header>
+        <div class="container">
+            <h1>欢迎来到管理员界面</h1>
+        </div>
+    </header>
+    <div class="container main-content">
+        <section class="welcome-section">
+            <h2>您好，管理员！</h2>
+        </section>
+
+        <section class="features">
+            <div class="feature-card">
+                <h3>图书详情</h3>
+                <p>总共有{{ book_num }} 本图书</p>
+                <a href="/book_num" class="btn">详情</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>借阅记录</h3>
+                <p>查看所有借阅记录</p>
+                <a href="/history" class="btn">查看记录</a>
+            </div>
+
+            <div class="feature-card">
+                <h3>用户管理</h3>
+                <p>总共有{{ user_num }} 个用户</p>
+                <a href="/users" class="btn">查看用户</a>
+            </div>
+        </section>
+
+        <section class="welcome-section">
+            <h2>新建公告</h2>
+            <input class="text" name="notice" size="100" width="3">
+           <br> <a href="#" class="btn">发布公告</a></br>
+        </section>
+    </div>
+
+ 
+   
+</body>
+</html>
