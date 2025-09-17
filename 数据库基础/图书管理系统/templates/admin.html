@@ -2,10 +2,28 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-  <title>管理员界面</title>
+    <title>管理员界面</title>
+    <style>
+        #hiddenContent, #hiddenRecords, #hiddenUsers, #hiddenNotice {
+            display: none;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
 </head>
 <body>
-<header>
+    <header>
         <div class="container">
             <h1>欢迎来到管理员界面</h1>
         </div>
@@ -16,33 +34,132 @@
         </section>
 
         <section class="features">
+
             <div class="feature-card">
                 <h3>图书详情</h3>
                 <p>总共有{{ book_num }} 本图书</p>
-                <a href="/book_num" class="btn">详情</a>
+                <button onclick="toggleContent()">详情</button>
+                <div id="hiddenContent">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>书名</th>
+                                <th>作者</th>
+                                <th>分类</th>
+                                <th>库存</th>
+                                <th>价格</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for book in books %}
+                            <tr>
+                                <td>{{ book.id }}</td>
+                                <td>{{ book.name }}</td>
+                                <td>{{ book.author }}</td>
+                                <td>{{ book.category }}</td>
+                                <td>{{ book.number }}</td>
+                                <td>{{ book.price }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="feature-card">
                 <h3>借阅记录</h3>
                 <p>查看所有借阅记录</p>
-                <a href="/history" class="btn">查看记录</a>
+                <button onclick="toggleRecords()">查看记录</button>
+                <div id="hiddenRecords">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>借阅ID</th>
+                                <th>借阅时间</th>
+                                <th>借阅人</th>
+                                <th>书名</th>
+                                <th>是否归还</th>
+                                <th>归还日期</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in records %}
+                            <tr>
+                                <td>{{ record.borrow_id }}</td>
+                                <td>{{ record.borrow_time }}</td>
+                                <td>{{ record.borrower }}</td>
+                                <td>{{ record.book_title }}</td>
+                                <td>{{ '是' if record.is_returned == 1 else '否' }}</td>
+                                <td>
+                                    {% if record.return_date %}
+                                    {{ record.return_date }}
+                                     {% else %}
+                                             未归还
+                                            {% endif %}
+<                                             /td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
 
             <div class="feature-card">
                 <h3>用户管理</h3>
                 <p>总共有{{ user_num }} 个用户</p>
-                <a href="/users" class="btn">查看用户</a>
+                <button onclick="toggleUsers()">查看用户</button>
+                <div id="hiddenUsers">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>用户ID</th>
+                                <th>用户名</th>
+                                <th>密码</th>
+                                <th>管理员</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <td>{{ user.id }}</td>
+                                <td>{{ user.name }}</td>
+                                <td>******</td>
+                                <td>{{ '是' if user.is_admin == 1 else '否' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </section>
-
         <section class="welcome-section">
             <h2>新建公告</h2>
-            <input class="text" name="notice" size="100" width="3">
-           <br> <a href="#" class="btn">发布公告</a></br>
+            <button onclick="toggleNotice()">公告发送</button>
+            <div id="hiddenNotice">
+                <input class="text" name="notice" size="100" width="3">
+                <br><a href="#" class="btn">发布公告</a></br>
+            </div>
         </section>
     </div>
 
- 
-   
+    <script>
+        function toggleContent() {
+            var content = document.getElementById("hiddenContent");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+        function toggleRecords() {
+            var content = document.getElementById("hiddenRecords");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+        function toggleUsers() {
+            var content = document.getElementById("hiddenUsers");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+        function toggleNotice() {
+            var content = document.getElementById("hiddenNotice");
+            content.style.display = content.style.display === "none" ? "block" : "none";
+        }
+    </script>
 </body>
 </html>

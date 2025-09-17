@@ -1,3 +1,3 @@
-key='your_pswd'
-sql_name='book'
+key='yourkey'
+sql_name='yoursqlname'
 user_name='root'

@@ -1,9 +1,10 @@
 from flask import Flask, render_template, request, redirect, session, url_for, flash
 from run import database
 
-
+premission=0 #权限管理
 app = Flask(__name__)
 app.secret_key = "secret_key"
+
 @app.route('/')
 def home():
     if 'logged_in' in session and session['logged_in']:
@@ -18,11 +19,12 @@ def login():
     username = request.form.get('username')
     password = request.form.get('password')
     result=database(f'SELECT pswd FROM users WHERE name = "{username}" ')
-    if result != None and result[0][0]==password:
+    print(result[0]['pswd'])
+    if result != None and result[0]['pswd']==password:
         session['logged_in'] = True
         session['username'] = username
         admin=database(f'SELECT is_admin FROM users WHERE name = "{username}" ')
-        if admin[0][0]==1:
+        if admin[0]['is_admin']==1:
             return redirect(url_for('admin'))
         return redirect(url_for('user'))
     else:
@@ -33,20 +35,26 @@ def logout():
     return redirect('/')
 @app.route('/admin')
 def admin():
-    return render_template('admin.html', book_num=len(database("SELECT name from book")),
-                           user_num=len(database("SELECT name from users")))
+    if 'logged_in' in session and session['logged_in']:
+        username = session['username']
+        admin = database(f'SELECT is_admin FROM users WHERE name = "{username}" ')
+        if admin[0]['is_admin'] == 1:
+            book_num = len(database("SELECT name from book"))
+            user_num = len(database("SELECT name from users"))
+            books=database('select * from book')
+            users=database('select * from users')
+            record=database('select * from record')
+            print(book_num,user_num,books,users,record)
+            return render_template('admin.html',book_num=book_num ,user_num=user_num,books=books,users=users,records=record)
+    return "无权限访问！ <a href='/'>返回</a>"
 @app.route('/user')
 def user():
-    return render_template('user.html')
-@app.route('/book_num')
-def book_num():
-    return render_template('book_num.html')
-@app.route('/users')
-def users():
-    return render_template('users.html')
-@app.route('/history')
-def history():
-    return render_template('history.html')
+    if 'logged_in' in session and session['logged_in']:
+        username = session['username']
+        user = database(f'SELECT is_admin FROM users WHERE name = "{username}" ')
+        if user[0]['is_admin'] == 0:
+            return render_template('user.html')
+    return "无权限访问！ <a href='/'>返回</a>"
 
 if __name__ == '__main__':
     app.run(debug=True)
